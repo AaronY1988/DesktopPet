@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>zh_CN</string>
+	<key>CFBundleDisplayName</key>
+	<string>DesktopPet</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+
+	<!-- 核心：不在 Dock 显示图标、不出现在 Cmd+Tab 里，只保留菜单栏入口。
+	     AppDelegate 里的 NSApp.setActivationPolicy(.accessory) 是运行时的等效设置，
+	     两者同时配置以确保在所有启动路径下都生效。 -->
+	<key>LSUIElement</key>
+	<true/>
+
+	<key>LSMinimumSystemVersion</key>
+	<string>13.0</string>
+
+	<key>NSHumanReadableCopyright</key>
+	<string>Copyright © 2026. All rights reserved.</string>
+
+	<!-- 悬浮窗需要在锁屏前的普通桌面场景下常驻，不需要后台音频/位置等特殊权限，
+	     因此这里不声明任何隐私用途说明（Usage Description）字符串。
+	     如果未来新增角色需要读取摄像头/麦克风等，请在这里补充对应的
+	     NS*UsageDescription 字段。 -->
+
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+</dict>
+</plist>
