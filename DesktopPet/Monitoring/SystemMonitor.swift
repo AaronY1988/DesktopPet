@@ -23,7 +23,7 @@ final class SystemMonitor: ObservableObject {
 
     static let shared = SystemMonitor()
 
-    /// 内存占用率，范围 0.0 ~ 1.0（用于驱动比熊的肚子缩放）
+    /// 内存占用率，范围 0.0 ~ 1.0（用于驱动宠物的整体/肚子缩放）
     @Published private(set) var memoryUsage: Double = 0
 
     /// 下行速率，单位 bytes/sec

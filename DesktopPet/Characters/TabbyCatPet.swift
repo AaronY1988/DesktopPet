@@ -2,7 +2,7 @@
 //  TabbyCatPet.swift
 //  DesktopPet
 //
-//  狸花猫（Chinese tabby cat）角色实现。和 BichonPet 一样实现 PetCharacter
+//  狸花猫（Chinese tabby cat）角色实现。和 SpottedDogPet 一样实现 PetCharacter
 //  协议，是"新增角色只需照着已有实现抄一遍协议成员"这条约定的第二个例子。
 //
 

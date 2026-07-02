@@ -3,7 +3,7 @@
 //  DesktopPet
 //
 //  管理"当前选中角色"这一全局状态，并提供角色注册表。
-//  新增角色时（`BichonPet` / `TabbyCatPet` 就是两个已经接入的例子），只需：
+//  新增角色时（`SpottedDogPet` / `TabbyCatPet` 就是两个已经接入的例子），只需：
 //    1. 实现一个新的 `XxxPet: PetCharacter`
 //    2. 在 `availableCharacters` 中追加一项 (id, 显示名)
 //    3. 在 `character(for:)` 的 switch 中追加一个分支
@@ -28,12 +28,12 @@ final class AppState: ObservableObject {
 
     /// 角色注册表：菜单栏"切换角色"子菜单据此生成选项。
     static let availableCharacters: [(id: String, name: String)] = [
-        (id: "bichon", name: "比熊犬"),
+        (id: "dog", name: "小花狗"),
         (id: "cat", name: "狸花猫"),
     ]
 
     private init() {
-        selectedCharacterID = UserDefaults.standard.string(forKey: Self.storageKey) ?? "bichon"
+        selectedCharacterID = UserDefaults.standard.string(forKey: Self.storageKey) ?? "dog"
     }
 
     /// 返回当前选中角色的具体实现实例。
@@ -44,12 +44,12 @@ final class AppState: ObservableObject {
     /// 根据 ID 构造角色实例。新增角色时在这里追加分支。
     static func character(for id: String) -> any PetCharacter {
         switch id {
-        case "bichon":
-            return BichonPet()
+        case "dog":
+            return SpottedDogPet()
         case "cat":
             return TabbyCatPet()
         default:
-            return BichonPet()
+            return SpottedDogPet()
         }
     }
 }

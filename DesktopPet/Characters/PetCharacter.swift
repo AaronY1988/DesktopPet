@@ -2,7 +2,7 @@
 //  PetCharacter.swift
 //  DesktopPet
 //
-//  桌宠角色协议。所有角色（比熊、未来的猫等）都实现这个协议，
+//  桌宠角色协议。所有角色（小花狗、狸花猫等）都实现这个协议，
 //  窗口管理（FloatingPanel）、系统监控（SystemMonitor）、菜单栏（MenuBarController）
 //  都只依赖这个协议，不感知具体角色的绘制细节，从而实现"新增角色只需新增一个
 //  实现该协议的类型"的可扩展架构。
@@ -34,13 +34,16 @@ protocol PetCharacter {
     /// "性格"参数：呼吸/眨眼/耳朵及尾巴 spring 的手感全部由这里驱动。
     /// 协议提供了默认实现（见下方 extension），新角色不特别定制的话
     /// 会拿到一套中性参数；想要独特手感就在具体类型里覆盖这个属性
-    /// （BichonPet / TabbyCatPet 都是这么做的）。
+    /// （SpottedDogPet / TabbyCatPet 都是这么做的）。
     var personality: PetPersonality { get }
 
     /// 根据当前系统指标绘制角色。
-    /// 实现应使用纯 SwiftUI `Shape` / `Canvas` 矢量绘制身体各部件
-    /// （身体、肚子、腿、耳朵、尾巴等应作为可独立驱动的子视图/子路径），
-    /// 不依赖任何图片资源，方便随时调整比例、颜色。
+    /// 优先考虑用纯 SwiftUI `Shape` / `Canvas` 矢量绘制身体各部件
+    /// （身体、肚子、腿、耳朵、尾巴等作为可独立驱动的子视图/子路径），
+    /// 这样能拿到最丰富的局部动画（狸花猫 `TabbyCatView` 就是这么做的）。
+    /// 如果美术资源是一整张不可拆分的矢量插画（比如小花狗 `SpottedDogView`
+    /// 用的 `Resources/Assets.xcassets` 矢量图片），也可以直接包装展示，
+    /// 只是只能做"整张图"级别的变换（缩放/位移/旋转），拿不到局部动画。
     func draw(metrics: PetMetrics) -> AnyView
 
     /// 根据可选的 CPU 温度，返回角色主体应该呈现的颜色。
@@ -59,7 +62,7 @@ enum PetIdleBehavior {
 
 extension PetCharacter {
     /// 默认返回中性参数。IdleAnimator / SpringValue（见 Animation/ 目录）
-    /// 都是两个角色共用的通用组件，真正让比熊和狸花猫"手感不同"的
+    /// 都是两个角色共用的通用组件，真正让不同角色"手感不同"的
     /// 只有这里返回的 PetPersonality 取值——这正是题目要求的
     /// "放在协议默认实现里，两个角色复用，只通过 personality 覆盖参数"。
     var personality: PetPersonality { .neutral }

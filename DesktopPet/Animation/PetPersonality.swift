@@ -5,7 +5,12 @@
 //  把"待机手感"相关的可调参数收拢成一个配置结构体。IdleAnimator 和
 //  各角色的尾巴 / 耳朵 spring 都读这里的值——两个角色共用同一份
 //  IdleAnimator / SpringValue 实现，靠这个结构体的不同取值制造出
-//  不同的"性格"（比熊沉稳蓬松、狸花猫轻快灵活）。
+//  不同的"性格"（小花狗沉稳、狸花猫轻快灵活）。
+//
+//  小花狗现在是整张矢量插画（SpottedDogView），没有耳朵/尾巴这些可以
+//  单独动的部件，personality.earStiffness / tailStiffness 等字段对它
+//  来说是"算了但用不上"，breathAmplitude / quirkProbabilityPerCheck
+//  这些作用在"整只宠物"级别的字段仍然生效。
 //
 //  下面 `earTwitchImpulse` / `quirkCheckInterval` 里给的具体数字，
 //  不是拍脑袋定的：用 Python 跑了一遍 SpringValue 的积分过程反推校准，
@@ -20,7 +25,7 @@ import Foundation
 struct PetPersonality {
     // MARK: 呼吸 / 重心微晃
 
-    /// 呼吸缩放的振幅（比熊更明显、狸花猫更沉稳内敛）
+    /// 呼吸缩放的振幅（小花狗更明显、狸花猫更沉稳内敛）
     var breathAmplitude: Double
     /// 重心微晃的振幅，两个角色目前共用同一个量级
     var swayAmplitude: Double = 2.0
@@ -43,12 +48,13 @@ struct PetPersonality {
 
     // MARK: 尾巴 spring 链（惯性跟随）
 
-    /// 串联的弹簧节数：狸花猫尾巴长、更灵活用 3 节；比熊尾巴短蓬用 2 节
+    /// 串联的弹簧节数：狸花猫尾巴长、更灵活用 3 节；小花狗预设仍保留 2 节
+    /// 的数值，但小花狗目前没有可动的尾巴部件，这个字段暂时用不上
     var tailSegmentCount: Int
     var tailStiffness: Double
     var tailDamping: Double
 
-    // MARK: 待机彩蛋动作（具体解读交给各角色：比熊可以是偶尔甩头，猫可以是尾尖抽动/舔爪）
+    // MARK: 待机彩蛋动作（具体解读交给各角色：小花狗是整体小幅摇晃，猫可以是尾尖抽动/舔爪）
 
     var quirkProbabilityPerCheck: Double
     var quirkCheckInterval: ClosedRange<Double>
@@ -71,24 +77,28 @@ struct PetPersonality {
         quirkCheckInterval: 4.0...6.5
     )
 
-    static let bichon = PetPersonality(
+    /// 小花狗是整张矢量插画，没有耳朵/尾巴部件，这里的 ear*/tail* 字段
+    /// 目前没有代码在读，保留数值只是为了不用单独定义一套"没有耳朵尾巴"
+    /// 的精简结构体——breathAmplitude / quirkProbabilityPerCheck 等
+    /// 作用在整只宠物身上的字段仍然生效。
+    static let spottedDog = PetPersonality(
         breathAmplitude: 0.03,
         blinkIntervalRange: 2.0...6.0,
         earStiffness: 120,
         earDamping: 14,
         earTwitchProbabilityPerCheck: 0.12,
         earTwitchCheckInterval: 2.5...4.5,
-        earTwitchImpulse: 550, // 校准后峰值约 14°
+        earTwitchImpulse: 550,
         tailSegmentCount: 2,
-        tailStiffness: 140, // 短蓬尾巴，刚度更高、甩得更"脆"
+        tailStiffness: 140,
         tailDamping: 17,
         quirkProbabilityPerCheck: 0.15,
-        quirkCheckInterval: 4.0...7.0 // 偶尔甩头
+        quirkCheckInterval: 4.0...7.0 // 偶尔整体摇晃一下
     )
 
     static let tabbyCat = PetPersonality(
         breathAmplitude: 0.025, // 猫呼吸更沉稳内敛
-        blinkIntervalRange: 1.5...4.0, // 眨眼比比熊更频繁
+        blinkIntervalRange: 1.5...4.0, // 眨眼比较频繁
         earStiffness: 150, // 猫耳更挺，回位更快
         earDamping: 17,
         earTwitchProbabilityPerCheck: 0.16,

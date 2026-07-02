@@ -12,17 +12,19 @@
 //  2）静态站姿下腿的长度足够长，能从身体轮廓下边缘露出来，不会变成
 //     贴在身体表面的一颗颗肉疙瘩。
 //
-//  和 BichonView 共用同一套底层动画组件（IdleAnimator / SpringValue /
-//  TailSpringChain），叠加了一层猫特有的"自主行为状态机"：闲置时不是
-//  简单地坐着不动，而是会自己在画布里踱步、舔爪子、伸懒腰、追一只飞过
-//  的小鸟，符合"没事儿的时候可以自己跑跑、追追小鸟、舔舔爪子"的要求。
+//  用的是 IdleAnimator / SpringValue / TailSpringChain 这套通用底层
+//  动画组件（小花狗换成矢量插画之后不再逐部件绘制，只还在用 IdleAnimator
+//  里"整只宠物"级别的呼吸/摇晃，耳朵 spring / TailSpringChain 这两个
+//  依赖"独立部件"的组件目前只有猫在用），叠加了一层猫特有的"自主行为
+//  状态机"：闲置时不是简单地坐着不动，而是会自己在画布里踱步、舔爪子、
+//  伸懒腰、追一只飞过的小鸟，符合"没事儿的时候可以自己跑跑、追追小鸟、
+//  舔舔爪子"的要求。
 //
-//  三层动画分工（和 BichonView 完全一致的思路）：
+//  三层动画分工：
 //  1) 待机微动画层（IdleAnimator + PetPersonality.tabbyCat）：呼吸、
-//     重心微晃、眨眼（比比熊更频繁）、耳朵抽动（猫耳更挺、回弹更快）、
-//     随机彩蛋——这里解读成"尾尖抽动"，叠加在尾巴 spring 输出上。
-//  2) spring 次级运动层：尾巴用 3 节链条（比比熊的 2 节更长更软），
-//     甩起来比狗尾巴更灵活、更有"液体感"。
+//     重心微晃、眨眼、耳朵抽动（猫耳更挺、回弹更快）、随机彩蛋——这里
+//     解读成"尾尖抽动"，叠加在尾巴 spring 输出上。
+//  2) spring 次级运动层：尾巴用 3 节链条，甩起来更灵活、更有"液体感"。
 //  3) 自主行为状态机（CatActivity）+ 系统数据层：网络活跃度决定"要不要
 //     全力奔跑"，网络空闲时由纯时间驱动的 `resolveActivity` 在几种
 //     猫的典型行为之间循环切换，不依赖随机数，方便预览时行为可复现。
@@ -125,7 +127,7 @@ struct TabbyCatView: View {
             let idleState = idleAnimator.update(t: t)
             let breathingCG = CGFloat(idleState.breathScale)
 
-            // --- 第 2 层：尾巴 spring 链（3 节，比比熊更软更灵活），
+            // --- 第 2 层：尾巴 spring 链（3 节，长尾更软更灵活），
             //     再叠加 quirkPulse 解读出的"尾尖抽动"彩蛋 ---
             let tailTargetAngle = tailTargetAngle(t: t, activity: activity)
             let tailSegmentValues = tailChain.update(t: t, drivingTarget: tailTargetAngle)
@@ -237,9 +239,8 @@ struct TabbyCatView: View {
         }
     }
 
-    /// 脖子过渡色块：头和身体两个独立蓬松轮廓之间的接缝盖住，
-    /// 和 BichonView 里的 neckConnector 是同一个技巧，纯粹是拼接细节、
-    /// 不改变整体造型比例。
+    /// 脖子过渡色块：把头和身体两个独立蓬松轮廓之间的接缝盖住，
+    /// 纯粹是拼接细节、不改变整体造型比例。
     private func neckConnector(breathing: CGFloat) -> some View {
         Ellipse()
             .fill(bodyColor)

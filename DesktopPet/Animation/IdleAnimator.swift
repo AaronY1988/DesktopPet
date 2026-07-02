@@ -15,7 +15,7 @@
 //  实现上是一个持有内部状态的 class 而不是纯函数，因为"下一次眨眼/
 //  抽耳朵的时间点"本身就需要跨帧记住，没法只用绝对时间 t 的闭式公式
 //  表达。用 @State 持有这个 class 的实例即可让它在 View 反复重建 body
-//  的过程中保持同一份状态（和 BichonView 里 `idleStartTime` 的做法一致）。
+//  的过程中保持同一份状态（和 SpottedDogView 里 `idleStartTime` 的做法一致）。
 //
 
 import Foundation
@@ -33,7 +33,7 @@ struct IdleState {
     var earTwitchL: Double = 0
     var earTwitchR: Double = 0
     /// 待机彩蛋动作的强度，触发瞬间跳到峰值（约 1.0）再自然回落，
-    /// 具体解读交给调用方：比熊可以拿它做"偶尔甩头"的角度系数，
+    /// 具体解读交给调用方：小花狗拿它做"整体小幅度摇晃"的角度系数，
     /// 猫可以拿它做"尾尖抽动"或"舔一下爪子"的动作强度。
     var quirkPulse: Double = 0
 }

@@ -2,11 +2,14 @@
 //  DebugCompareView.swift
 //  DesktopPet
 //
-//  调试用的"手感对比"预览：同时显示比熊和狸花猫，并提供两个滑块手动
+//  调试用的"手感对比"预览：同时显示小花狗和狸花猫，并提供两个滑块手动
 //  控制内存占用 / 网络活跃度这两个归一化指标，方便在不用真的去吃内存、
-//  跑网速的情况下，直接对比两只宠物在同一组数值下的呼吸节奏、眨眼频率、
-//  耳朵抽动手感、尾巴甩动软硬程度差异——这正是 PetPersonality.bichon
-//  与 .tabbyCat 两套参数想要体现的差异。
+//  跑网速的情况下，直接对比两只宠物在同一组数值下的表现差异。
+//
+//  小花狗现在是整张矢量插画（SpottedDogView），没有耳朵抽动/尾巴甩动这些
+//  局部动画了，能对比的只剩呼吸节奏、待机摇晃、奔跑弹跳/抖动这些"整只
+//  宠物一起动"的效果；狸花猫（TabbyCatView）仍然是逐部件手绘，两边不再
+//  是完全对等的比较，这里主要用来看猫的 PetPersonality.tabbyCat 参数。
 //
 //  用法一：在 Xcode 里直接打开这个文件，用画布左下角的 Preview 就能看到；
 //  用法二：运行 App 之后，从菜单栏选择"调试：手感对比预览"打开一个独立
@@ -33,9 +36,9 @@ struct DebugCompareView: View {
 
             HStack(alignment: .top, spacing: 40) {
                 VStack {
-                    Text("比熊犬").font(.subheadline).foregroundColor(.secondary)
-                    BichonView(metrics: metrics, bodyColor: .white, personality: .bichon)
-                        .frame(width: 170, height: 150)
+                    Text("小花狗").font(.subheadline).foregroundColor(.secondary)
+                    SpottedDogView(metrics: metrics, personality: .spottedDog)
+                        .frame(width: 150, height: 170)
                         .background(Color(white: 0.97))
                         .cornerRadius(12)
                 }
@@ -55,7 +58,7 @@ struct DebugCompareView: View {
 
             VStack(alignment: .leading, spacing: 12) {
                 VStack(alignment: .leading) {
-                    Text("内存占用（肚子大小）：\(Int(memoryFraction * 100))%")
+                    Text("内存占用（体型大小）：\(Int(memoryFraction * 100))%")
                         .font(.caption)
                     Slider(value: $memoryFraction, in: 0...1)
                 }
@@ -67,7 +70,7 @@ struct DebugCompareView: View {
             }
             .frame(width: 320)
 
-            Text("两只宠物共用同一套 IdleAnimator / SpringValue 组件，\n手感差异完全来自 PetPersonality.bichon 与 .tabbyCat 的参数取值。")
+            Text("小花狗是矢量插画整体驱动（呼吸/待机摇晃/奔跑弹跳），\n狸花猫仍然是 IdleAnimator / SpringValue 驱动的逐部件矢量绘制，\n两边手感不再直接可比，这里主要用来看猫的 PetPersonality.tabbyCat 参数。")
                 .font(.caption2)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
