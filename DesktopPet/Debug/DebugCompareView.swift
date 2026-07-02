@@ -33,8 +33,8 @@ struct DebugCompareView: View {
 
             HStack(alignment: .top, spacing: 40) {
                 VStack {
-                    Text("比熊犬").font(.subheadline).foregroundColor(.secondary)
-                    BichonView(metrics: metrics, bodyColor: .white, personality: .bichon)
+                    Text("比熊犬（Rive）").font(.subheadline).foregroundColor(.secondary)
+                    BichonView(metrics: metrics, personality: .bichon)
                         .frame(width: 170, height: 150)
                         .background(Color(white: 0.97))
                         .cornerRadius(12)
@@ -67,7 +67,7 @@ struct DebugCompareView: View {
             }
             .frame(width: 320)
 
-            Text("两只宠物共用同一套 IdleAnimator / SpringValue 组件，\n手感差异完全来自 PetPersonality.bichon 与 .tabbyCat 的参数取值。")
+            Text("比熊现在是 Rive 素材驱动（网络空闲会暂停走路循环），\n狸花猫仍然是 IdleAnimator / SpringValue 驱动的纯矢量绘制，\n两边手感不再直接可比，这里主要用来看猫的 PetPersonality.tabbyCat 参数。")
                 .font(.caption2)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
