@@ -2,14 +2,9 @@
 //  BichonPet.swift
 //  DesktopPet
 //
-//  比熊角色实现——这一版换成了 Rive 驱动（素材见 Resources/dog.riv），
-//  不再是纯 SwiftUI 矢量绘制。PetCharacter 协议本身没有变，别的角色
-//  （比如 TabbyCatPet）完全不用关心这只角色具体是怎么画的。
-//
-//  dog.riv 里目前只有一段循环走路时间轴动画 `dog-walk-cycle`，以及一个
-//  带三个点击触发反应（摸耳朵/尾巴/舌头）的 State Machine，没有可以
-//  连续驱动的"肚子大小"之类的自定义输入，所以内存驱动肚子变大这个效果
-//  这一版先不做了（详见 BichonView.swift 里的说明和 README 的已知限制）。
+//  白色比熊犬（Bichon Frise）角色实现。
+//  这是 PetCharacter 协议的第一个实现，其他角色（如 TabbyCatPet）
+//  只需照着这个文件的结构，实现同样的协议成员即可，无需改动其他模块。
 //
 
 import SwiftUI
@@ -20,18 +15,25 @@ struct BichonPet: PetCharacter {
     let canvasSize = CGSize(width: 170, height: 150)
     let idleAnimation: PetIdleBehavior = .sit
 
-    /// 比熊的性格参数目前只用于（未来）待机彩蛋的解读，Rive 素材本身
-    /// 还没有接入 IdleAnimator / SpringValue 这套通用组件。
+    /// 比熊的性格参数：呼吸更明显、尾巴短蓬刚度高、偶尔甩头（见 PetPersonality.bichon）
     let personality: PetPersonality = .bichon
 
     func draw(metrics: PetMetrics) -> AnyView {
-        AnyView(BichonView(metrics: metrics, personality: personality))
+        AnyView(
+            BichonView(
+                metrics: metrics,
+                bodyColor: colorForTemperature(metrics.cpuTemperature),
+                personality: personality
+            )
+        )
     }
 
-    /// Rive 素材的颜色是在 Rive 编辑器里画好的，代码这边目前没有接口能
-    /// 覆盖它的配色（除非文件里有导出对应的 Data Binding / 颜色输入）。
-    /// 保留这个方法只是为了满足协议，暂时不生效。
+    /// 比熊本身是纯白色的，这里保留一个"温度越高越偏暖色"的插值效果，
+    /// 用于未来接入真实 CPU 温度采集时可以直接生效；
+    /// 目前 metrics.cpuTemperature 始终为 nil，因此始终呈现纯白。
     func colorForTemperature(_ celsius: Double?) -> Color {
-        .white
+        guard let celsius else { return .white }
+        let t = min(max((celsius - 35) / (75 - 35), 0), 1)
+        return Color(red: 1.0, green: 1.0 - 0.12 * t, blue: 1.0 - 0.4 * t)
     }
 }
