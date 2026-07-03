@@ -77,10 +77,10 @@ struct PetPersonality {
         quirkCheckInterval: 4.0...6.5
     )
 
-    /// 小花狗是整张矢量插画，没有耳朵/尾巴部件，这里的 ear*/tail* 字段
-    /// 目前没有代码在读，保留数值只是为了不用单独定义一套"没有耳朵尾巴"
-    /// 的精简结构体——breathAmplitude / quirkProbabilityPerCheck 等
-    /// 作用在整只宠物身上的字段仍然生效。
+    /// 小花狗已拆成分层矢量部件（SpottedDogParts.swift），ear*/tail*
+    /// 字段全部真正生效：耳朵随机抽动走 earSpring，尾巴用 2 节、刚度 140
+    /// 的链条（本征频率约 1.9Hz，比猫的 3 节软链更"硬朗"，甩动干脆），
+    /// quirkPulse 解读为"甩头"。
     static let spottedDog = PetPersonality(
         breathAmplitude: 0.03,
         blinkIntervalRange: 2.0...6.0,

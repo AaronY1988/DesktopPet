@@ -67,3 +67,7 @@ fastlane/test_output
 # Build artifacts
 DerivedData/
 *.xcuserstate
+
+# 已放弃的 Rive 方案遗留资产（见提交 48ad87d）
+dog.riv
+__pycache__/

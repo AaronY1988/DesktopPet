@@ -40,9 +40,11 @@ protocol PetCharacter {
     /// 根据当前系统指标绘制角色。
     /// 优先考虑用纯 SwiftUI `Shape` / `Canvas` 矢量绘制身体各部件
     /// （身体、肚子、腿、耳朵、尾巴等作为可独立驱动的子视图/子路径），
-    /// 这样能拿到最丰富的局部动画（狸花猫 `TabbyCatView` 就是这么做的）。
-    /// 如果美术资源是一整张不可拆分的矢量插画（比如小花狗 `SpottedDogView`
-    /// 用的 `Resources/Assets.xcassets` 矢量图片），也可以直接包装展示，
+    /// 这样能拿到最丰富的局部动画。狸花猫 `TabbyCatView` 是手绘部件；
+    /// 小花狗 `SpottedDogView` 则是把用户提供的整张 SVG 插画用脚本
+    /// （tools/dog-rig/）拆成分层部件（见 `SpottedDogParts.swift`），
+    /// 两条路最终都实现了逐部件驱动。
+    /// 如果美术资源是一整张实在不可拆分的插画，也可以直接包装展示，
     /// 只是只能做"整张图"级别的变换（缩放/位移/旋转），拿不到局部动画。
     func draw(metrics: PetMetrics) -> AnyView
 

@@ -2,11 +2,14 @@
 //  SpottedDogPet.swift
 //  DesktopPet
 //
-//  小花狗角色实现——包装一整张用户提供的矢量插画（转成 PDF 放进
-//  Assets.xcassets/SpottedDog.imageset，勾选了 Preserve Vector Data，
-//  任意窗口缩放下都不会糊），取代了之前纯 SwiftUI Shape 手绘的
-//  白色比熊犬。具体能保留 / 失去哪些动画效果，见 SpottedDogView.swift
-//  开头的详细说明。
+//  小花狗角色实现——分层矢量部件版。用户提供的 SVG 插画已经用
+//  tools/dog-rig/ 里的脚本拆成了独立部件（SpottedDogParts.swift）：
+//  四条腿各分大腿/小腿两段（髋部+膝盖双关节）、头、双耳、尾巴、眼睛
+//  都能单独驱动，奔跑步态/耳朵抽动/尾巴 spring 甩动/眨眼等局部动画
+//  全部恢复，具体见 SpottedDogView.swift。
+//
+//  （旧版曾经是包装一整张 Assets.xcassets/SpottedDog 矢量插画，只能做
+//  整图级别的缩放/位移；那套资源仍留在 asset catalog 里，代码已不再引用。）
 //
 
 import SwiftUI
@@ -14,21 +17,24 @@ import SwiftUI
 struct SpottedDogPet: PetCharacter {
     let id = "dog"
     let displayName = "小花狗"
-    let canvasSize = CGSize(width: 150, height: 170)
+    // 画布 = 悬浮窗大小，必须容得下最坏情况的组合动作：
+    // 肚子鼓胀（内存驱动）+ 奔跑弹跳/抖动 + 踱步位移 + 扑跪整体旋转
+    // + 睡觉 z 字上飘。旧的 150x170 会在这些动作时裁掉头顶/耳朵/z 字，
+    // 改成 190x205 后全部动作都有余量。
+    let canvasSize = CGSize(width: 190, height: 205)
     let idleAnimation: PetIdleBehavior = .sit
 
-    /// 小花狗的性格参数（见 PetPersonality.spottedDog）：呼吸/重心微晃/
-    /// 待机彩蛋摇晃复用了原来比熊那套数值，耳朵/尾巴 spring 相关字段
-    /// 目前没有对应的可动部件，保留字段只是为了不用另外定义一套结构体。
+    /// 小花狗的性格参数（见 PetPersonality.spottedDog）。拆件之后
+    /// ear*/tail* 这些 spring 字段全部真正生效了：耳朵随机抽动、
+    /// 尾巴 2 节链条滞后甩动。
     let personality: PetPersonality = .spottedDog
 
     func draw(metrics: PetMetrics) -> AnyView {
         AnyView(SpottedDogView(metrics: metrics, personality: personality))
     }
 
-    /// 插画本身的颜色是画死在矢量图里的，代码这边没有接口能覆盖它的配色
-    /// （除非以后换成能做颜色替换的格式，比如给关键色块加 Data Binding）。
-    /// 保留这个方法只是为了满足协议，目前不生效。
+    /// 插画的配色固定在部件路径的填充色里（SpottedDogColors），
+    /// 暂不随温度变化。保留这个方法只是为了满足协议。
     func colorForTemperature(_ celsius: Double?) -> Color {
         .white
     }

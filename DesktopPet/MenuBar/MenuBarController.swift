@@ -11,7 +11,16 @@ import AppKit
 import Combine
 import SwiftUI
 
-final class MenuBarController: NSObject {
+final class MenuBarController: NSObject, NSMenuDelegate {
+
+    /// 角色子菜单每次展开前刷新勾选状态，保证与 AppState 一致
+    func menuNeedsUpdate(_ menu: NSMenu) {
+        let selectedID = AppState.shared.selectedCharacterID
+        for item in menu.items {
+            guard let id = item.representedObject as? String else { continue }
+            item.state = (id == selectedID) ? .on : .off
+        }
+    }
 
     private var statusItem: NSStatusItem!
     private let panelController: FloatingPanelController
@@ -35,20 +44,23 @@ final class MenuBarController: NSObject {
             // 使用系统 SF Symbol 做菜单栏图标，避免额外引入图片资源
             button.image = NSImage(systemSymbolName: "pawprint.fill", accessibilityDescription: "DesktopPet")
         }
-        statusItem.menu = buildMenu()
+        statusItem.menu = buildMenu(selectedID: AppState.shared.selectedCharacterID)
     }
 
-    private func buildMenu() -> NSMenu {
+    private func buildMenu(selectedID: String) -> NSMenu {
         let menu = NSMenu()
 
         // --- 切换角色 ---
         let characterItem = NSMenuItem(title: "切换角色", action: nil, keyEquivalent: "")
         let characterSubmenu = NSMenu()
+        // delegate 让子菜单每次展开前都按 AppState 刷新勾选，
+        // 即使中途有其他路径改了选中角色，菜单也不会显示过期状态
+        characterSubmenu.delegate = self
         for entry in AppState.availableCharacters {
             let item = NSMenuItem(title: entry.name, action: #selector(selectCharacter(_:)), keyEquivalent: "")
             item.target = self
             item.representedObject = entry.id
-            item.state = (entry.id == AppState.shared.selectedCharacterID) ? .on : .off
+            item.state = (entry.id == selectedID) ? .on : .off
             characterSubmenu.addItem(item)
         }
         characterItem.submenu = characterSubmenu
@@ -97,14 +109,19 @@ final class MenuBarController: NSObject {
         return menu
     }
 
-    /// 切换角色后：重新生成菜单（更新勾选状态）+ 通知悬浮窗更新画布尺寸
+    /// 切换角色后：重新生成菜单（更新勾选状态）+ 通知悬浮窗更新画布尺寸。
+    ///
+    /// ⚠️ @Published 是在 willSet 阶段发布的：sink 回调执行时
+    /// `AppState.shared.selectedCharacterID` 还是旧值！之前这里直接读
+    /// 属性，导致菜单勾选滞后一步、悬浮窗按旧角色的画布改尺寸——
+    /// 就是"切换时有点混乱"的根源。必须用回调参数里的新值。
     private func observeCharacterChanges() {
         AppState.shared.$selectedCharacterID
             .dropFirst()
-            .sink { [weak self] _ in
+            .sink { [weak self] newID in
                 guard let self else { return }
-                self.statusItem.menu = self.buildMenu()
-                self.panelController.updateContentSize(AppState.shared.currentCharacter().canvasSize)
+                self.statusItem.menu = self.buildMenu(selectedID: newID)
+                self.panelController.updateContentSize(AppState.character(for: newID).canvasSize)
             }
             .store(in: &cancellables)
     }

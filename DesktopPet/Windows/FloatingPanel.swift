@@ -84,10 +84,15 @@ final class FloatingPanelController: NSObject {
         panel.ignoresMouseEvents = ignores
     }
 
-    /// 角色切换后画布尺寸可能变化，重新设置窗口内容大小（保持左上角位置不变）。
+    /// 角色切换后画布尺寸可能变化，重新设置窗口内容大小。
+    /// AppKit 的 frame.origin 是左下角：只改 size 会让窗口以左下角为
+    /// 锚点变形，宠物（画布内水平居中、脚贴近底边）会横向跳一下。
+    /// 这里水平方向按窗口中心对齐、垂直方向保持底边不动，切换角色时
+    /// 宠物基本站在原地。
     func updateContentSize(_ size: CGSize) {
         guard let panel else { return }
         var frame = panel.frame
+        frame.origin.x += (frame.size.width - size.width) / 2
         frame.size = size
         panel.setFrame(frame, display: true)
         hostingView?.frame = NSRect(origin: .zero, size: size)

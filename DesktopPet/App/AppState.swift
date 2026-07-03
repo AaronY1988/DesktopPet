@@ -27,9 +27,11 @@ final class AppState: ObservableObject {
     @Published var ignoresMouseEvents: Bool = false
 
     /// 角色注册表：菜单栏"切换角色"子菜单据此生成选项。
+    /// 显示名直接取自角色实现的 displayName，避免两处维护不一致
+    /// （之前菜单里写死"狸花猫"，而角色改版后叫"小橘猫"）。
     static let availableCharacters: [(id: String, name: String)] = [
-        (id: "dog", name: "小花狗"),
-        (id: "cat", name: "狸花猫"),
+        (id: "dog", name: SpottedDogPet().displayName),
+        (id: "cat", name: TabbyCatPet().displayName),
     ]
 
     private init() {

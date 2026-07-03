@@ -22,8 +22,10 @@
 		C030646549914697845B401D /* TailSpringChain.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDE28B5554EA4A58B60F5568 /* TailSpringChain.swift */; };
 		D91D5B20252545F3AFDC08E6 /* PetContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFC388DFBD14324975D1489 /* PetContainerView.swift */; };
 		165D6A752FD745EDAF92465B /* SpottedDogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C349A3BEBDC4233852DD53F /* SpottedDogView.swift */; };
+		A7D0G5A11AB34F00B2C3D4E5 /* SpottedDogParts.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D0G5A21AB34F00B2C3D4E6 /* SpottedDogParts.swift */; };
 		0FE6DEADCB124B05A918C53A /* SharedShapes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26801297F2C549ECB79C9EA4 /* SharedShapes.swift */; };
 		AC7CF603B1AC415B903BD643 /* TabbyCatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2FCB745DADA40CEA6E1F3DA /* TabbyCatView.swift */; };
+		B8E1F6B22CD45A11C3D4E5F6 /* CatPoses.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8E1F6B32CD45A11C3D4E5F7 /* CatPoses.swift */; };
 		F2B73348052D48C285F04DB0 /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1093DFDA52BC44A7AB21E69B /* MenuBarController.swift */; };
 		7FA152950C8840FF92826C45 /* LoginItemManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B5B896C8A6442786BEAC05 /* LoginItemManager.swift */; };
 		31F8BFE566944CDCAB3C12D0 /* DebugCompareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CCDAF109705489BAA0D340A /* DebugCompareView.swift */; };
@@ -46,8 +48,10 @@
 		BDE28B5554EA4A58B60F5568 /* TailSpringChain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TailSpringChain.swift; sourceTree = "<group>"; };
 		1BFC388DFBD14324975D1489 /* PetContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetContainerView.swift; sourceTree = "<group>"; };
 		3C349A3BEBDC4233852DD53F /* SpottedDogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpottedDogView.swift; sourceTree = "<group>"; };
+		A7D0G5A21AB34F00B2C3D4E6 /* SpottedDogParts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpottedDogParts.swift; sourceTree = "<group>"; };
 		26801297F2C549ECB79C9EA4 /* SharedShapes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedShapes.swift; sourceTree = "<group>"; };
 		A2FCB745DADA40CEA6E1F3DA /* TabbyCatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbyCatView.swift; sourceTree = "<group>"; };
+		B8E1F6B32CD45A11C3D4E5F7 /* CatPoses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatPoses.swift; sourceTree = "<group>"; };
 		1093DFDA52BC44A7AB21E69B /* MenuBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarController.swift; sourceTree = "<group>"; };
 		14B5B896C8A6442786BEAC05 /* LoginItemManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginItemManager.swift; sourceTree = "<group>"; };
 		4CCDAF109705489BAA0D340A /* DebugCompareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugCompareView.swift; sourceTree = "<group>"; };
@@ -146,8 +150,10 @@
 			children = (
 				1BFC388DFBD14324975D1489 /* PetContainerView.swift */,
 				3C349A3BEBDC4233852DD53F /* SpottedDogView.swift */,
+				A7D0G5A21AB34F00B2C3D4E6 /* SpottedDogParts.swift */,
 				26801297F2C549ECB79C9EA4 /* SharedShapes.swift */,
 				A2FCB745DADA40CEA6E1F3DA /* TabbyCatView.swift */,
+				B8E1F6B32CD45A11C3D4E5F7 /* CatPoses.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -276,8 +282,10 @@
 				C030646549914697845B401D /* TailSpringChain.swift in Sources */,
 				D91D5B20252545F3AFDC08E6 /* PetContainerView.swift in Sources */,
 				165D6A752FD745EDAF92465B /* SpottedDogView.swift in Sources */,
+				A7D0G5A11AB34F00B2C3D4E5 /* SpottedDogParts.swift in Sources */,
 				0FE6DEADCB124B05A918C53A /* SharedShapes.swift in Sources */,
 				AC7CF603B1AC415B903BD643 /* TabbyCatView.swift in Sources */,
+				B8E1F6B22CD45A11C3D4E5F6 /* CatPoses.swift in Sources */,
 				F2B73348052D48C285F04DB0 /* MenuBarController.swift in Sources */,
 				7FA152950C8840FF92826C45 /* LoginItemManager.swift in Sources */,
 				31F8BFE566944CDCAB3C12D0 /* DebugCompareView.swift in Sources */,
